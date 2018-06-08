@@ -13,7 +13,7 @@ export default class WaterChart{
             cy,//圆心
             r,//外圆半径
             margin =10,//外圆到波浪的距离
-            strokeWidth = 2,//外圆的边框宽度
+            strokeWidth = 10,//外圆的边框宽度
             stroke ='',//外圆的颜色，如果没有传值，默认为渐变色，如果指定了渐变色，底部波浪和外圆使用一个渐变色，上层圆提亮几个level
             fill = 'transparent',//外圆的背景色
             waveCount= 1,//图形中有几个波浪
@@ -28,6 +28,8 @@ export default class WaterChart{
             waveAnimationTimeF = d3.easeLinear,//水平动画的时间函数
             textIsAnimate = true,//文本是否有从小变大的动画
             textIsPercent = true,//是否加百分号显示
+            textUnit,//指定单位
+            textUnitSize = '18px',//指定单位的字号
             textPositionY = 0.2, // 文本垂直位置
             textSize = 0.5 ,//文本大小
             accuracy = 1, // 精度
@@ -37,6 +39,7 @@ export default class WaterChart{
             textColor3,//第二个波浪下的文字的颜色
             container = 'svg'
         }= {...options};
+        console.log(textUnit);
         //gradient不用传递，根据stroke参数类型得出，gradient :是否渐变
         let gradient = false,circleColor,waveRise = waveAnimation;//波浪是否随着数值的变化有垂直动画,单独的从下到上的动画不支持，因为仅仅只是clippath的动画，ui不会刷新
         container = d3.select(container);
@@ -183,17 +186,21 @@ export default class WaterChart{
             const textSizeScale = d3.scaleLinear().range([14, innerR]).domain([0, 1]),
                 fontSize = textSizeScale(textSize),
                 startValue = (textIsAnimate ? (this.prevValue===0 ? minValue:this.prevValue) : series[0])/(maxValue - minValue),
-                textScaleY = d3.scaleLinear().range([cy + innerR -fontSize/2,cy - innerR + fontSize + fontSize/2 ]).domain([1,0]),
-                textUnit = (()=>textIsPercent?'%':'')();
-            target.text((startValue*100).toFixed(accuracy)+textUnit).attr('font-size',fontSize)
+                textScaleY = d3.scaleLinear().range([cy + innerR -fontSize/2,cy - innerR + fontSize + fontSize/2 ]).domain([1,0]);
+                textUnit = textUnit ? textUnit: (textIsPercent ? '%':'');
+            target.text((startValue*100).toFixed(accuracy)).attr('font-size',fontSize)
                 .attr('transform',`translate(${cx},${textScaleY(textPositionY)})`);
+            target.append('tspan').text(textUnit).attr('font-size',textUnitSize);
             let finalValue = series[0],
                 oriFinalValue = series[0];
             if(textIsAnimate){
                 let textTween = function(){
                     let self = this;
                     var i = d3.interpolate(parseFloat(self.textContent), finalValue);
-                    return (t) =>  {self.textContent = parseFloat(i(t)).toFixed(accuracy) + textUnit;};
+                    return (t) =>  {
+                        target.text(parseFloat(i(t)).toFixed(accuracy));
+                        target.append('tspan').text(textUnit).attr('font-size',textUnitSize);
+                    };
 
                 };
                 target.transition()
