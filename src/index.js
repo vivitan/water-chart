@@ -6,13 +6,13 @@ export default class WaterChart{
         this.prevValue = 0;
         let {
             className = 'basic-water-chart',
-                minValue = 0, // 最小值
-            maxValue = 100,//最大值
+            minValue = 0, // 最小值
+            maxValue = 200,//最大值
             series = [60],//当前值
             cx,//圆心
             cy,//圆心
             r,//外圆半径
-            margin =10,//外圆到波浪的距离
+            margin = 10,//外圆到波浪的距离
             strokeWidth = 10,//外圆的边框宽度
             stroke ='',//外圆的颜色，如果没有传值，默认为渐变色，如果指定了渐变色，底部波浪和外圆使用一个渐变色，上层圆提亮几个level
             fill = 'transparent',//外圆的背景色
@@ -39,7 +39,7 @@ export default class WaterChart{
             textColor3,//第二个波浪下的文字的颜色
             container = 'svg'
         }= {...options};
-        console.log(textUnit);
+        textIsPercent = textUnit?false:textIsPercent;
         //gradient不用传递，根据stroke参数类型得出，gradient :是否渐变
         let gradient = false,circleColor,waveRise = waveAnimation;//波浪是否随着数值的变化有垂直动画,单独的从下到上的动画不支持，因为仅仅只是clippath的动画，ui不会刷新
         container = d3.select(container);
@@ -53,7 +53,7 @@ export default class WaterChart{
                     cy = h/2;
 
             }
-            innerR = r - margin - strokeWidth;
+            innerR = r - margin - strokeWidth/2;
             if(!stroke||typeof (stroke) ==='object'){
                 gradient = true;
                 if(Object.keys(stroke).length < 2){
@@ -185,14 +185,14 @@ export default class WaterChart{
         let textCountAnimate = (target) => {
             const textSizeScale = d3.scaleLinear().range([14, innerR]).domain([0, 1]),
                 fontSize = textSizeScale(textSize),
-                startValue = (textIsAnimate ? (this.prevValue===0 ? minValue:this.prevValue) : series[0])/(maxValue - minValue),
                 textScaleY = d3.scaleLinear().range([cy + innerR -fontSize/2,cy - innerR + fontSize + fontSize/2 ]).domain([1,0]);
                 textUnit = textUnit ? textUnit: (textIsPercent ? '%':'');
-            target.text((startValue*100).toFixed(accuracy)).attr('font-size',fontSize)
+            let finalValue, startValue = (textIsAnimate ? (this.prevValue===0 ? minValue:this.prevValue) : series[0]);
+            startValue = textIsPercent ? textIsPercent/(maxValue-minValue) : startValue;
+            finalValue = (textIsPercent? series[0]/(maxValue - minValue)*100: series[0]).toFixed(accuracy);
+            target.text((textIsPercent?startValue*100:startValue).toFixed(accuracy)).attr('font-size',fontSize)
                 .attr('transform',`translate(${cx},${textScaleY(textPositionY)})`);
             target.append('tspan').text(textUnit).attr('font-size',textUnitSize);
-            let finalValue = series[0],
-                oriFinalValue = series[0];
             if(textIsAnimate){
                 let textTween = function(){
                     let self = this;
