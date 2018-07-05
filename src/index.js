@@ -7,13 +7,13 @@ export default class WaterChart{
         let {
             className = 'basic-water-chart',
             minValue = 0, // 最小值
-            maxValue = 200,//最大值
-            series = [60],//当前值
+            maxValue = 100,//最大值
+            series = [60],//当前值,这里为了配合云图的数据格式，采用了数组形式
             cx,//圆心
             cy,//圆心
             r,//外圆半径
             margin = 10,//外圆到波浪的距离
-            strokeWidth = 10,//外圆的边框宽度
+            strokeWidth = 5,//外圆的边框宽度
             stroke ='',//外圆的颜色，如果没有传值，默认为渐变色，如果指定了渐变色，底部波浪和外圆使用一个渐变色，上层圆提亮几个level
             fill = 'transparent',//外圆的背景色
             waveCount= 1,//图形中有几个波浪
@@ -67,6 +67,7 @@ export default class WaterChart{
                 circleColor = stroke;
             }
         }
+        //渐变
         let initGradient = () => {
             let gradient = container.append('defs');
             let id1 = className + 'gradient1',id2 = className + 'gradient2';
@@ -91,9 +92,11 @@ export default class WaterChart{
             waveColor1 = circleColor = `url(#${id1})`;
             waveColor2 = `url(#${id2})`;
         }
+        //外圆
         let initOutCircle = () => {
             container.append('circle').attr('cx',cx).attr('cy',cy).attr('fill',fill).attr('stroke',circleColor).attr('stroke-width',strokeWidth).attr('r',r);
         }
+        //波浪路径
         let initPath = (target,fn) => {
             const  waveHeightScale = d3.scaleLinear().range([3, innerR * 0.5]).domain([0, 1]),
                 wavesHeight = waveHeightScale(waveHeight),
@@ -118,6 +121,7 @@ export default class WaterChart{
                 })(data));
 
         }
+        //波浪垂直动画
         let raiseAnimate = (target) => {
             const waveHeightScale = d3.scaleLinear().range([3, innerR * 0.5]).domain([0, 1]),
                 wavesHeight = waveHeightScale(waveHeight),
@@ -138,6 +142,7 @@ export default class WaterChart{
                 target.attr('transform', `translate(0,${waveRiseScale(end)})`);
             }
         }
+        //波浪水平动画
         let waveAnimate = (target) => {
             const  waveHeightScale = d3.scaleLinear().range([3, innerR * 0.5]).domain([0, 1]),
                 wavesHeight = waveHeightScale(waveHeight),
@@ -156,6 +161,7 @@ export default class WaterChart{
                 });
             }
         }
+        //初始化波浪
         let initWaves = () => {
             let text1 = container.append('text').attr('text-anchor','middle').attr('fill',textColor1).attr('transform',`translate(${cx},${cy})`);
             let  group1 = container.append('g').attr('clip-path',`url(#wave-clip-path1)`),
@@ -182,6 +188,7 @@ export default class WaterChart{
             waveAnimate (wave2);
             initText();
         }
+        //文本动画
         let textCountAnimate = (target) => {
             const textSizeScale = d3.scaleLinear().range([14, innerR]).domain([0, 1]),
                 fontSize = textSizeScale(textSize),
