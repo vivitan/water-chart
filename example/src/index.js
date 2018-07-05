@@ -1,3 +1,3 @@
-import WaterChart from '../../lib/index'
+import WaterChart from 'water-chart'
 let options = {container:'#water-chart'};
 let wave = new WaterChart(options);
