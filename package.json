@@ -1,8 +1,8 @@
 {
     "name": "water-chart",
     "version": "1.0.0",
-    "description": "",
-    "repository": "",
+    "description": "water-chart",
+    "repository": "water-chart chart",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
