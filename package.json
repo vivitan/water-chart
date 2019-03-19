@@ -1,6 +1,6 @@
 {
     "name": "water-chart",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "water-chart",
     "repository": "water-chart chart",
     "main": "dist/water-chart.min.js",
