@@ -9,22 +9,16 @@ npm install water-chart
 <img src='http://imgcache.qq.com/open_proj/proj_qcloud_v2/rocket_images/1530708457442_bs9k1urcs935wmi.gif'>
 
 
-<img src='http://blog.eibook.cn/images/水位图控制.gif'/>
+
+<img src='https://imgcache.qq.com/open_proj/proj_qcloud_v2/demo2.gif'>
 
 
-### 通过npm install的demo见example文件夹:
 
-```
-let options = {container:'#water-chart'};
-let wave = new WaterChart(options);
-```
+### 通过模块引用的demo见example/es文件夹:
 
 
-### 通过script标签引入的demo见scriptExample文件夹
-```
-  let options = {container:'#water-chart'};
-  let wave = waterChart.run(options);
-```
+### 通过script标签引入的demo见example/var文件夹:
+
 
 注意：容器元素必须为svg，如果默认没有指定水位图的半径，容器元素必须有宽和高
 
