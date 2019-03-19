@@ -1,21 +1,25 @@
-var webpack = require('webpack')
-
 module.exports = {
-
-    entry: {
-        waterChart: './src/waterChart.js'
-    },
-
+    mode: 'production',
     output: {
-        path: __dirname + '/lib',
-        filename: '[name].js',
-        libraryTarget: 'var',
-        library: '[name]'
+        filename: 'water-chart.min.js',
+        library: 'WaterChart',
+        libraryTarget: 'umd',
+        libraryExport: "default",
     },
-
+    externals: {
+        d3: 'd3'
+    },
     module: {
         rules: [
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
+            {
+                test: /\.js$/,
+                use : [
+                    {
+                        loader: "babel-loader"
+                    }
+                ],
+                exclude:/node_modules/
+            }
         ]
     }
-}
+};

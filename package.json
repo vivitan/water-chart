@@ -3,25 +3,26 @@
     "version": "1.0.0",
     "description": "water-chart",
     "repository": "water-chart chart",
-    "main": "index.js",
+    "main": "dist/water-chart.min.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack && babel src/index.js --out-file lib/index.js",
+        "build": "webpack",
         "start": "babel src/index.js --watch --out-dir lib"
     },
     "author": "vickytan",
     "license": "ISC",
     "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.0",
-        "babel-loader": "^7.1.4",
-        "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.1",
-        "webpack": "^4.14.0"
+        "@babel/cli": "^7.2.3",
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "babel-loader": "^8.0.5",
+        "webpack": "^4.14.0",
+        "webpack-cli": "^3.3.0"
+    },
+    "peerDependencies": {
+        "d3": "^4.7.3"
     },
     "dependencies": {
-        "d3": "^4.7.3"
+        "babel": "^6.23.0"
     }
 }

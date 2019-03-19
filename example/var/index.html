@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>水位图demo</title>
+</head>
+<body>
+<svg id="water-chart" style="width: 500px;height: 500px"></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.1/d3.js"></script>
+<script src="../../dist/water-chart.min.js"></script>
+<script>
+    let options = {container:'#water-chart'};
+    let wave = new WaterChart(options);
+</script>
+</body>
+</html>

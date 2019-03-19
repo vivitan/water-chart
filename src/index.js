@@ -1,6 +1,5 @@
 import * as d3 from 'd3'
-
-export default class WaterChart{
+class WaterChart{
 
     constructor(options){
         this.prevValue = 0;
@@ -48,9 +47,9 @@ export default class WaterChart{
             if(!r){
                 let w = getComputedStyle(container.node()).width.split('px')[0],
                     h = getComputedStyle(container.node()).height.split('px')[0];
-                    r = (Math.min(w,h) - strokeWidth)/2;
-                    cx = w/2;
-                    cy = h/2;
+                r = (Math.min(w,h) - strokeWidth)/2;
+                cx = w/2;
+                cy = h/2;
 
             }
             innerR = r - margin - strokeWidth/2;
@@ -193,7 +192,7 @@ export default class WaterChart{
             const textSizeScale = d3.scaleLinear().range([14, innerR]).domain([0, 1]),
                 fontSize = textSizeScale(textSize),
                 textScaleY = d3.scaleLinear().range([cy + innerR -fontSize/2,cy - innerR + fontSize + fontSize/2 ]).domain([1,0]);
-                textUnit = textUnit ? textUnit: (textIsPercent ? '%':'');
+            textUnit = textUnit ? textUnit: (textIsPercent ? '%':'');
             let finalValue, startValue = (textIsAnimate ? (this.prevValue===0 ? minValue:this.prevValue) : series[0]);
             startValue = textIsPercent ? textIsPercent/(maxValue-minValue) : startValue;
             finalValue = (textIsPercent? series[0]/(maxValue - minValue)*100: series[0]).toFixed(accuracy);
@@ -221,6 +220,7 @@ export default class WaterChart{
         initOutCircle();
         initWaves();
     }
-    
+
 
 }
+export default WaterChart;
